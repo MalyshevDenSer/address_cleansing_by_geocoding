@@ -1,13 +1,13 @@
 from geopy import GoogleV3
-import os
 from string import ascii_uppercase
 import worksheet
+from main import GOOGLE_V3_API
 
 
 def google_geocode(sheet):
     source_column = sheet[ascii_uppercase[0]]
 
-    google_geocoder = GoogleV3(api_key=os.getenv('GOOGLE_V3_API'), domain='maps.google.ru')
+    google_geocoder = GoogleV3(api_key=GOOGLE_V3_API, domain='maps.google.ru')
     country = region = city = street = house_number = post_code = position = 'NONE'
 
     for i, cell in enumerate(source_column[1:], start=1):
