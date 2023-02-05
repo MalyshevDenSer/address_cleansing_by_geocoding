@@ -1,18 +1,17 @@
 from geopy import GoogleV3
 from string import ascii_uppercase
 import worksheet
-from main import GOOGLE_V3_API
 
 
-def google_geocode(sheet):
+def google_geocode(sheet, google_api):
     source_column = sheet[ascii_uppercase[0]]
 
-    google_geocoder = GoogleV3(api_key=GOOGLE_V3_API, domain='maps.google.ru')
+    geocoder = GoogleV3(api_key=google_api, domain='maps.google.ru')
     country = region = city = street = house_number = post_code = position = 'NONE'
 
     for i, cell in enumerate(source_column[1:], start=1):
         place = cell.value
-        geocoded = google_geocoder.geocode(place)
+        geocoded = geocoder.geocode(place)
         if geocoded is not None:
             for info in geocoded.raw['address_components']:
                 selected_block = info['types']
@@ -39,4 +38,3 @@ def google_geocode(sheet):
                        'post_code': post_code,
                        'position': position}
         worksheet.write_in_a_row(sheet, i, parsed_info)
-
