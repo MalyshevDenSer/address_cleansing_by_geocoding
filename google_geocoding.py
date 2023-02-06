@@ -35,6 +35,6 @@ def google_geocode(sheet, google_api):
                        'city': city,
                        'street': street,
                        'house_number': house_number,
-                       'post_code': post_code,
+                       'postal_code': post_code,
                        'position': position}
         worksheet.write_in_a_row(sheet, i, parsed_info)
