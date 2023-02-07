@@ -18,26 +18,28 @@ def get_geocoder_data(service):
         geocoder = GoogleV3(api_key=GOOGLE_V3_API, domain='maps.google.ru')
         keys = {'nested_dict': ['address_components'],
                 'item': 'types',
-                'text': 'long_name',
+                'value': 'long_name',
                 'country': 'country',
                 'city': 'locality',
                 'region': 'administrative_area_level_1',
                 'house_number': 'street_number',
                 'street': 'route',
-                'postal_code': {'postal_code': ['formatted_address']}
+                'postal_code': ['formatted_address']
                 }
+
     elif service == 'yandex':
         geocoder = Yandex(api_key=YANDEX_API)
         keys = {'nested_dict': ['metaDataProperty', 'GeocoderMetaData', 'Address', 'Components'],
                 'item': 'kind',
-                'text': 'name',
+                'value': 'name',
                 'country': 'country',
                 'city': 'locality',
                 'region': 'province',
                 'house_number': 'house',
                 'street': 'route',
-                'postal_code': {'postal_code': ['metaDataProperty', 'GeocoderMetaData', 'Address', 'postal_code']}
+                'postal_code': ['metaDataProperty', 'GeocoderMetaData', 'Address', 'postal_code']
                 }
+
     else:
         print('wrong service, choose google or yandex')
         exit()
@@ -56,19 +58,19 @@ def geocode(sheet, service):
         if geocoded is not None:
             for info in find_address_components(geocoded.raw, keys['nested_dict']):
                 item = info[keys['item']]
-                text = info[keys['text']]
+                value = info[keys['value']]
                 if keys['country'] in item:
-                    country = text
+                    country = value
                 if keys['city'] in item:
-                    city = text
+                    city = value
                 if keys['region'] in item:
-                    region = text
+                    region = value
                 if keys['house_number'] in item:
-                    house_number = text
+                    house_number = value
                 if keys['street'] in item:
-                    street = text
+                    street = value
 
-                postal_code = find_address_components(geocoded.raw, keys.get('postal_code').get('postal_code'))[-6:]
+                postal_code = find_address_components(geocoded.raw, keys.get('postal_code'))[-6:]
 
         parsed_info = {'country': country,
                        'region': region,
