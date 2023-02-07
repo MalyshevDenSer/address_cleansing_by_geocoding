@@ -13,7 +13,7 @@ def yandex_geocode(sheet, yandex_api):
         place = cell.value
         geocoded = geocoder.geocode(place)
         if geocoded is not None:
-            for numb, info in enumerate(geocoded.raw['metaDataProperty']['GeocoderMetaData']['Address']['Components']):
+            for numb, info in geocoded.raw['metaDataProperty']['GeocoderMetaData']['Address']['Components']:
                 selected_block = info['kind']
                 if 'country' in selected_block:
                     country = info['name']
