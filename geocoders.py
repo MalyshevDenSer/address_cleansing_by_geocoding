@@ -1,5 +1,6 @@
 from geopy import GoogleV3, Yandex
 from string import ascii_uppercase
+from settings import GOOGLE_V3_API, YANDEX_API
 import worksheet
 
 
@@ -9,14 +10,12 @@ def find_address_components(gecoded_raw_data, keys):
     return gecoded_raw_data
 
 
-def geocode(sheet, service, api):
-    source_column = sheet[ascii_uppercase[0]]
-    country = region = city = street = house_number = postal_code = position = 'NONE'
+def get_geocoder_data(service):
     geocoder = None
     keys = None
 
     if service == 'google':
-        geocoder = GoogleV3(api_key=api, domain='maps.google.ru')
+        geocoder = GoogleV3(api_key=GOOGLE_V3_API, domain='maps.google.ru')
         keys = {'nested_dict': ['address_components'],
                 'item': 'types',
                 'text': 'long_name',
@@ -28,7 +27,7 @@ def geocode(sheet, service, api):
                 'postal_code': {'postal_code': ['formatted_address']}
                 }
     elif service == 'yandex':
-        geocoder = Yandex(api_key=api)
+        geocoder = Yandex(api_key=YANDEX_API)
         keys = {'nested_dict': ['metaDataProperty', 'GeocoderMetaData', 'Address', 'Components'],
                 'item': 'kind',
                 'text': 'name',
@@ -42,6 +41,14 @@ def geocode(sheet, service, api):
     else:
         print('wrong service, choose google or yandex')
         exit()
+
+    return keys, geocoder
+
+
+def geocode(sheet, service):
+    source_column = sheet[ascii_uppercase[0]]
+    keys, geocoder = get_geocoder_data(service)
+    country = region = city = street = house_number = postal_code = 'NONE'
 
     for i, cell in enumerate(source_column[1:], start=1):
         place = cell.value
@@ -68,7 +75,7 @@ def geocode(sheet, service, api):
                        'city': city,
                        'street': street,
                        'house_number': house_number,
-                       'postal_code': postal_code,
-                       'position': position}
+                       'postal_code': postal_code
+                       }
         print(parsed_info)
         worksheet.write_in_a_row(sheet, i, parsed_info)

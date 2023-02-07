@@ -14,7 +14,6 @@ def write_in_a_row(sheet, i, parsed_info):
     sheet[ascii_uppercase[4]][i].value = parsed_info['street']
     sheet[ascii_uppercase[5]][i].value = parsed_info['house_number']
     sheet[ascii_uppercase[6]][i].value = parsed_info['postal_code']
-    sheet[ascii_uppercase[7]][i].value = parsed_info['position']
 
 
 def save_wb(wb):
