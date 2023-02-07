@@ -11,7 +11,7 @@ def find_address_components(gecoded_raw_data, keys):
 
 def geocode(sheet, service, api):
     source_column = sheet[ascii_uppercase[0]]
-    country = region = city = street = house_number = post_code = position = 'NONE'
+    country = region = city = street = house_number = postal_code = position = 'NONE'
     geocoder = None
     keys = None
 
@@ -25,13 +25,20 @@ def geocode(sheet, service, api):
                 'region': 'administrative_area_level_1',
                 'house_number': 'street_number',
                 'street': 'route',
-                'postal_code': 'postal_code'
+                'postal_code': {'postal_code': ['formatted_address']}
                 }
     elif service == 'yandex':
         geocoder = Yandex(api_key=api)
         keys = {'nested_dict': ['metaDataProperty', 'GeocoderMetaData', 'Address', 'Components'],
                 'item': 'kind',
-                'text': 'name'}
+                'text': 'name',
+                'country': 'country',
+                'city': 'locality',
+                'region': 'province',
+                'house_number': 'house',
+                'street': 'route',
+                'postal_code': {'postal_code': ['metaDataProperty', 'GeocoderMetaData', 'Address', 'postal_code']}
+                }
     else:
         print('wrong service, choose google or yandex')
         exit()
@@ -53,10 +60,8 @@ def geocode(sheet, service, api):
                     house_number = text
                 if keys['street'] in item:
                     street = text
-                if keys['postal_code'] in item:
-                    postal_code = text
-                # position = str(geocoded.raw['geometry']['location']['lat']) + ' ' + str(
-                #     geocoded.raw['geometry']['location']['lng'])
+
+                postal_code = find_address_components(geocoded.raw, keys.get('postal_code').get('postal_code'))[-6:]
 
         parsed_info = {'country': country,
                        'region': region,
