@@ -1,13 +1,14 @@
 from geopy import GoogleV3, Yandex
 from string import ascii_uppercase
-from settings import GOOGLE_V3_API, YANDEX_API
+from settings import GOOGLE_V3_API, YANDEX_API, GOOGLE_KEYS, YANDEX_KEYS
 import worksheet
+from collections import OrderedDict
 
 
-def find_address_components(gecoded_raw_data, keys):
+def find_address_components(dict_to_nest, keys):
     for i in keys:
-        gecoded_raw_data = gecoded_raw_data.get(i)
-    return gecoded_raw_data
+        dict_to_nest = dict_to_nest.get(i)
+    return dict_to_nest
 
 
 def get_geocoder_data(service):
@@ -16,29 +17,11 @@ def get_geocoder_data(service):
 
     if service == 'google':
         geocoder = GoogleV3(api_key=GOOGLE_V3_API, domain='maps.google.ru')
-        keys = {'nested_dict': ['address_components'],
-                'item': 'types',
-                'value': 'long_name',
-                'country': 'country',
-                'city': 'locality',
-                'region': 'administrative_area_level_1',
-                'house_number': 'street_number',
-                'street': 'route',
-                'postal_code': ['formatted_address']
-                }
+        keys = GOOGLE_KEYS
 
     elif service == 'yandex':
         geocoder = Yandex(api_key=YANDEX_API)
-        keys = {'nested_dict': ['metaDataProperty', 'GeocoderMetaData', 'Address', 'Components'],
-                'item': 'kind',
-                'value': 'name',
-                'country': 'country',
-                'city': 'locality',
-                'region': 'province',
-                'house_number': 'house',
-                'street': 'route',
-                'postal_code': ['metaDataProperty', 'GeocoderMetaData', 'Address', 'postal_code']
-                }
+        keys = YANDEX_KEYS
 
     else:
         print('wrong service, choose google or yandex')
@@ -72,12 +55,13 @@ def geocode(sheet, service):
 
                 postal_code = find_address_components(geocoded.raw, keys.get('postal_code'))[-6:]
 
-        parsed_info = {'country': country,
-                       'region': region,
-                       'city': city,
-                       'street': street,
-                       'house_number': house_number,
-                       'postal_code': postal_code
-                       }
+        parsed_info = OrderedDict([
+            ('country', country),
+            ('region', region),
+            ('city', city),
+            ('street', street),
+            ('house_number', house_number),
+            ('postal_code', postal_code),
+        ])
         print(parsed_info)
         worksheet.write_in_a_row(sheet, i, parsed_info)
