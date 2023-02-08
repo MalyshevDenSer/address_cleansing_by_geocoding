@@ -63,5 +63,4 @@ def geocode(sheet, service):
             ('house_number', house_number),
             ('postal_code', postal_code),
         ])
-        print(parsed_info)
         worksheet.write_in_a_row(sheet, i, parsed_info)

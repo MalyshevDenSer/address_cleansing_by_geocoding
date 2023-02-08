@@ -8,8 +8,9 @@ def open_wb(path_to_file):
 
 
 def write_in_a_row(sheet, i, parsed_info):
-    for key in parsed_info:
-        sheet[ascii_uppercase[1]][i].value = parsed_info[key]
+    for letter, key in enumerate(parsed_info, start=1):
+        print(sheet[ascii_uppercase[letter]][i])
+        sheet[ascii_uppercase[letter]][i].value = parsed_info[key]
 
 
 def save_wb(wb):
