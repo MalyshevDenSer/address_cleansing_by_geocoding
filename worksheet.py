@@ -8,14 +8,12 @@ def open_wb(path_to_file):
 
 
 def write_in_a_row(sheet, i, parsed_info):
-    sheet[ascii_uppercase[1]][i].value = parsed_info['country']
-    sheet[ascii_uppercase[2]][i].value = parsed_info['region']
-    sheet[ascii_uppercase[3]][i].value = parsed_info['city']
-    sheet[ascii_uppercase[4]][i].value = parsed_info['street']
-    sheet[ascii_uppercase[5]][i].value = parsed_info['house_number']
-    sheet[ascii_uppercase[6]][i].value = parsed_info['postal_code']
-    sheet[ascii_uppercase[7]][i].value = parsed_info['position']
+    for letter, key in enumerate(parsed_info, start=1):
+        print(sheet[ascii_uppercase[letter]][i])
+        sheet[ascii_uppercase[letter]][i].value = parsed_info[key]
 
 
 def save_wb(wb):
     wb.save('result.xlsx')
+
+
