@@ -1,6 +1,6 @@
 from geopy import GoogleV3, Yandex
 from string import ascii_uppercase
-from settings import GOOGLE_V3_API, YANDEX_API, GOOGLE_KEYS, YANDEX_KEYS
+from settings import GOOGLE_V3_API, YANDEX_API, DEFAULT_KEYS, GOOGLE_KEYS, YANDEX_KEYS
 import worksheet
 from collections import OrderedDict
 
@@ -17,11 +17,11 @@ def get_geocoder_data(service):
 
     if service == 'google':
         geocoder = GoogleV3(api_key=GOOGLE_V3_API, domain='maps.google.ru')
-        keys = GOOGLE_KEYS
+        keys = {l: GOOGLE_KEYS[k] for k, l in enumerate(DEFAULT_KEYS)}
 
     elif service == 'yandex':
         geocoder = Yandex(api_key=YANDEX_API)
-        keys = YANDEX_KEYS
+        keys = {l: YANDEX_KEYS[k] for k, l in enumerate(DEFAULT_KEYS)}
 
     else:
         print('wrong service, choose google or yandex')
