@@ -1,3 +1,4 @@
+from pprint import pprint
 from string import ascii_uppercase
 import worksheet
 from collections import OrderedDict
@@ -42,12 +43,12 @@ def parsing(geocoder, place):
 
 def geocode(sheet, geocoders):
     source_column = sheet[ascii_uppercase[0]]
+    # parsed_info = None
 
     for i, cell in enumerate(source_column[1:], start=1):
         place = cell.value
         for geocoder in geocoders:
             parsed_info = parsing(geocoder, place)
-
             if any(list(parsed_info.values())) is not None:
-                continue
-            worksheet.write_in_a_row(sheet, i, parsed_info)
+                worksheet.write_in_a_row(sheet, i, parsed_info)
+                break
