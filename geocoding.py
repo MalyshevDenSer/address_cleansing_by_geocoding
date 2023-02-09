@@ -1,6 +1,4 @@
-from geopy import GoogleV3, Yandex
 from string import ascii_uppercase
-from settings import GOOGLE_V3_API, YANDEX_API, DEFAULT_KEYS, GOOGLE_KEYS, YANDEX_KEYS
 import worksheet
 from collections import OrderedDict
 
@@ -11,27 +9,10 @@ def find_address_components(dict_to_nest, keys):
     return dict_to_nest
 
 
-def get_geocoder_data(service):
-    geocoder = None
-    keys = None
-
-    if service == 'google':
-        geocoder = GoogleV3(api_key=GOOGLE_V3_API, domain='maps.google.ru')
-        keys = {l: GOOGLE_KEYS[k] for k, l in enumerate(DEFAULT_KEYS)}
-
-    elif service == 'yandex':
-        geocoder = Yandex(api_key=YANDEX_API)
-        keys = {l: YANDEX_KEYS[k] for k, l in enumerate(DEFAULT_KEYS)}
-
-    else:
-        print('wrong service, choose google or yandex')
-        exit()
-
-    return keys, geocoder
-
-
-def parsing(geocoded, keys):
-    country = region = city = street = house_number = postal_code = 'NONE'
+def parsing(geocoder, place):
+    geocoded = geocoder['engine'].geocode(place)
+    keys = geocoder['keys']
+    country = region = city = street = house_number = postal_code = None
     if geocoded is not None:
         for info in find_address_components(geocoded.raw, keys['nested_dict']):
             item = info[keys['item']]
@@ -60,12 +41,14 @@ def parsing(geocoded, keys):
     return parsed_info
 
 
-def geocode(sheet, service):
+def geocode(sheet, geocoders):
     source_column = sheet[ascii_uppercase[0]]
-    keys, geocoder = get_geocoder_data(service)
 
     for i, cell in enumerate(source_column[1:], start=1):
         place = cell.value
-        geocoded = geocoder.geocode(place)
-        parsed_info = parsing(geocoded, keys)
-        worksheet.write_in_a_row(sheet, i, parsed_info)
+        for geocoder in geocoders:
+            parsed_info = parsing(geocoder, place)
+
+            if any(list(parsed_info.values())) is not None:
+                continue
+            worksheet.write_in_a_row(sheet, i, parsed_info)
