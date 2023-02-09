@@ -48,7 +48,7 @@ YANDEX_KEYS = (
     'locality',
     'province',
     'house',
-    'route',
+    'street',
     ['metaDataProperty', 'GeocoderMetaData', 'Address', 'postal_code']
 )
 
