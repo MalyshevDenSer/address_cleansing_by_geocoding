@@ -27,8 +27,7 @@ def parsing(geocoder, place):
                 house_number = value
             if keys['street'] in item:
                 street = value
-
-            postal_code = find_address_components(geocoded.raw, keys.get('postal_code'))[-6:]
+                postal_code = find_address_components(geocoded.raw, keys.get('postal_code'))[-6:]
 
     parsed_info = OrderedDict([
         ('country', country),
