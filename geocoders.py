@@ -1,3 +1,5 @@
+from pprint import pprint
+
 from geopy import GoogleV3, Yandex
 from string import ascii_uppercase
 from settings import GOOGLE_V3_API, YANDEX_API, GOOGLE_KEYS, YANDEX_KEYS
@@ -33,11 +35,11 @@ def get_geocoder_data(service):
 def geocode(sheet, service):
     source_column = sheet[ascii_uppercase[0]]
     keys, geocoder = get_geocoder_data(service)
-    country = region = city = street = house_number = postal_code = 'NONE'
 
     for i, cell in enumerate(source_column[1:], start=1):
         place = cell.value
         geocoded = geocoder.geocode(place)
+        country = region = city = street = house_number = postal_code = 'NONE'
         if geocoded is not None:
             for info in find_address_components(geocoded.raw, keys['nested_dict']):
                 item = info[keys['item']]
@@ -52,7 +54,6 @@ def geocode(sheet, service):
                     house_number = value
                 if keys['street'] in item:
                     street = value
-
                 postal_code = find_address_components(geocoded.raw, keys.get('postal_code'))[-6:]
 
         parsed_info = OrderedDict([
