@@ -30,37 +30,42 @@ def get_geocoder_data(service):
     return keys, geocoder
 
 
+def parsing(geocoded, keys):
+    country = region = city = street = house_number = postal_code = 'NONE'
+    if geocoded is not None:
+        for info in find_address_components(geocoded.raw, keys['nested_dict']):
+            item = info[keys['item']]
+            value = info[keys['value']]
+            if keys['country'] in item:
+                country = value
+            if keys['city'] in item:
+                city = value
+            if keys['region'] in item:
+                region = value
+            if keys['house_number'] in item:
+                house_number = value
+            if keys['street'] in item:
+                street = value
+
+            postal_code = find_address_components(geocoded.raw, keys.get('postal_code'))[-6:]
+
+    parsed_info = OrderedDict([
+        ('country', country),
+        ('region', region),
+        ('city', city),
+        ('street', street),
+        ('house_number', house_number),
+        ('postal_code', postal_code),
+    ])
+    return parsed_info
+
+
 def geocode(sheet, service):
     source_column = sheet[ascii_uppercase[0]]
     keys, geocoder = get_geocoder_data(service)
-    country = region = city = street = house_number = postal_code = 'NONE'
 
     for i, cell in enumerate(source_column[1:], start=1):
         place = cell.value
         geocoded = geocoder.geocode(place)
-        if geocoded is not None:
-            for info in find_address_components(geocoded.raw, keys['nested_dict']):
-                item = info[keys['item']]
-                value = info[keys['value']]
-                if keys['country'] in item:
-                    country = value
-                if keys['city'] in item:
-                    city = value
-                if keys['region'] in item:
-                    region = value
-                if keys['house_number'] in item:
-                    house_number = value
-                if keys['street'] in item:
-                    street = value
-
-                postal_code = find_address_components(geocoded.raw, keys.get('postal_code'))[-6:]
-
-        parsed_info = OrderedDict([
-            ('country', country),
-            ('region', region),
-            ('city', city),
-            ('street', street),
-            ('house_number', house_number),
-            ('postal_code', postal_code),
-        ])
+        parsed_info = parsing(geocoded, keys)
         worksheet.write_in_a_row(sheet, i, parsed_info)

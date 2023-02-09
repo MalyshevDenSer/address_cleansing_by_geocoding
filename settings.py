@@ -4,6 +4,13 @@ from pprint import pprint
 from dotenv import load_dotenv
 from collections import OrderedDict
 
+#
+
+
+
+
+# env variables
+
 load_dotenv()
 
 GOOGLE_V3_API = os.getenv('GOOGLE_V3_API')
@@ -50,27 +57,3 @@ YANDEX_KEYS = (
 )
 
 keys = {l: GOOGLE_KEYS[k] for k, l in enumerate(DEFAULT_KEYS)}
-pprint(keys)
-
-# GOOGLE_KEYS = {'nested_dict': ['address_components'],
-#                'item': 'types',
-#                'value': 'long_name',
-#                'country': 'country',
-#                'city': 'locality',
-#                'region': 'administrative_area_level_1',
-#                'house_number': 'street_number',
-#                'street': 'route',
-#                'postal_code': ['formatted_address']
-#                }
-#
-# YANDEX_KEYS = {'nested_dict': ['metaDataProperty', 'GeocoderMetaData', 'Address', 'Components'],
-#                'item': 'kind',
-#                'value': 'name',
-#                'country': 'country',
-#                'city': 'locality',
-#                'region': 'province',
-#                'house_number': 'house',
-#                'street': 'route',
-#                'postal_code': ['metaDataProperty', 'GeocoderMetaData', 'Address', 'postal_code']
-#                }
-#
