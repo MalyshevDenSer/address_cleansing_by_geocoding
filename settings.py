@@ -55,8 +55,8 @@ YANDEX_KEYS = (
 
 PRIORITY_ORDER = ['google', 'yandex']
 
+geocoders = list()
 for service in PRIORITY_ORDER:
-    geocoders = list()
     if service == 'google':
         engine = GoogleV3(api_key=GOOGLE_V3_API, domain='maps.google.ru')
         keys = {l: GOOGLE_KEYS[k] for k, l in enumerate(DEFAULT_KEYS)}

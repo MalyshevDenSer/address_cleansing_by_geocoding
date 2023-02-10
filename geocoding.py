@@ -1,16 +1,19 @@
-from pprint import pprint
 from string import ascii_uppercase
 import worksheet
 from collections import OrderedDict
+from typing import Union, List, Dict
+from openpyxl.worksheet.worksheet import Worksheet
+from geopy.geocoders.yandex import Yandex
+from geopy.geocoders.google import GoogleV3
 
 
-def find_address_components(dict_to_nest, keys):
+def find_address_components(dict_to_nest: dict, keys: list) -> list:
     for i in keys:
         dict_to_nest = dict_to_nest.get(i)
     return dict_to_nest
 
 
-def parsing(geocoder, place):
+def parsing(geocoder: Dict[str, Union[Yandex, GoogleV3, dict]], place: str) -> OrderedDict:
     geocoded = geocoder['engine'].geocode(place)
     keys = geocoder['keys']
     country = region = city = street = house_number = postal_code = None
@@ -41,14 +44,14 @@ def parsing(geocoder, place):
     return parsed_info
 
 
-def geocode(sheet, geocoders):
+def geocode(sheet: Worksheet, geocoders: List[dict]) -> None:
     source_column = sheet[ascii_uppercase[0]]
-    # parsed_info = None
 
     for i, cell in enumerate(source_column[1:], start=1):
         place = cell.value
         for geocoder in geocoders:
             parsed_info = parsing(geocoder, place)
-            if any(list(parsed_info.values())) is not None:
+            print(geocoder)
+            if any(parsed_info.values()) is True:
                 worksheet.write_in_a_row(sheet, i, parsed_info)
                 break
