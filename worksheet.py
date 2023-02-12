@@ -16,7 +16,6 @@ def write_in_a_row(sheet: Worksheet, i: int, parsed_info: OrderedDict) -> None:
 
 
 def save_wb(wb: Workbook) -> None:
-    print(type(wb))
     wb.save('result.xlsx')
 
 
