@@ -51,7 +51,6 @@ def geocode(sheet: Worksheet, geocoders: List[dict]) -> None:
         place = cell.value
         for geocoder in geocoders:
             parsed_info = parsing(geocoder, place)
-            print(geocoder)
-            if any(parsed_info.values()) is True:
+            if all(parsed_info.values()):
                 worksheet.write_in_a_row(sheet, i, parsed_info)
                 break
