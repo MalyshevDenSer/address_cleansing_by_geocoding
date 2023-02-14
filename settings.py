@@ -60,15 +60,13 @@ for service in PRIORITY_ORDER:
     if service == 'google':
         engine = GoogleV3(api_key=GOOGLE_V3_API, domain='maps.google.ru')
         keys = {l: GOOGLE_KEYS[k] for k, l in enumerate(DEFAULT_KEYS)}
-        geocoders.append({'engine': engine, 'keys': keys})
+        geocoders.append({'engine': engine, 'keys': keys, 'type': 'google'})
 
     elif service == 'yandex':
         engine = Yandex(api_key=YANDEX_API)
         keys = {l: YANDEX_KEYS[k] for k, l in enumerate(DEFAULT_KEYS)}
-        geocoders.append({'engine': engine, 'keys': keys})
+        geocoders.append({'engine': engine, 'keys': keys, 'type': 'yandex'})
 
     else:
         print('wrong service in variable PRIORITY_ORDER, choose google, yandex or add new geocoder info to settings.py')
         exit()
-
-

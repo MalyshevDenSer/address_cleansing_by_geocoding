@@ -1,19 +1,20 @@
 from string import ascii_uppercase
 import worksheet
 from collections import OrderedDict
-from typing import Union, List, Dict
+from typing import Union
 from openpyxl.worksheet.worksheet import Worksheet
 from geopy.geocoders.yandex import Yandex
 from geopy.geocoders.google import GoogleV3
+from pprint import pprint
 
 
-def find_address_components(dict_to_nest: dict, keys: list) -> list:
+def find_address_components(info: dict, keys: list) -> list:
     for i in keys:
-        dict_to_nest = dict_to_nest.get(i)
-    return dict_to_nest
+        info = info.get(i)
+    return info
 
 
-def parsing(geocoder: Dict[str, Union[Yandex, GoogleV3, dict]], place: str) -> OrderedDict:
+def parsing(geocoder: dict[str, Union[Yandex, GoogleV3, dict, str]], place: str) -> OrderedDict:
     geocoded = geocoder['engine'].geocode(place)
     keys = geocoder['keys']
     country = region = city = street = house_number = postal_code = None
@@ -31,7 +32,9 @@ def parsing(geocoder: Dict[str, Union[Yandex, GoogleV3, dict]], place: str) -> O
                 house_number = value
             if keys['street'] in item:
                 street = value
-                postal_code = find_address_components(geocoded.raw, keys.get('postal_code'))[-6:]
+            postal_code = find_address_components(geocoded.raw, keys.get('postal_code'))
+            if geocoder['type'] == 'google' and postal_code is not None:
+                postal_code = postal_code[-6:]
 
     parsed_info = OrderedDict([
         ('country', country),
@@ -41,10 +44,11 @@ def parsing(geocoder: Dict[str, Union[Yandex, GoogleV3, dict]], place: str) -> O
         ('house_number', house_number),
         ('postal_code', postal_code),
     ])
+    pprint(parsed_info)
     return parsed_info
 
 
-def geocode(sheet: Worksheet, geocoders: List[dict]) -> None:
+def geocode(sheet: Worksheet, geocoders: list[dict]) -> None:
     source_column = sheet[ascii_uppercase[0]]
 
     for i, cell in enumerate(source_column[1:], start=1):
