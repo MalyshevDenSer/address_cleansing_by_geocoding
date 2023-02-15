@@ -8,9 +8,7 @@ from geopy.geocoders.google import GoogleV3
 
 
 def find_address_components(info: dict, keys: list) -> list:
-    # print(info)
     for i in keys:
-        # print('au')
         info = info.get(i)
     return info
 
