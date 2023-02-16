@@ -4,6 +4,21 @@ from pprint import pprint
 from dotenv import load_dotenv
 from collections import OrderedDict
 from geopy import GoogleV3, Yandex
+from abc import ABC
+
+
+class Geocoder(ABC):
+    def __init__(self, address_dict, item, value, country, city, region, house_number, street, postal_code):
+        self.address_dict = address_dict
+        self.item = item
+        self.value = value
+        self.country = country
+        self.city = city
+        self.region = region
+        self.house_number = house_number
+        self.street = street
+        self.postal_code = postal_code
+
 
 # env variables
 
@@ -29,7 +44,7 @@ DEFAULT_KEYS = OrderedDict([
 ])
 
 GOOGLE_KEYS = (
-    ('address_components', ),
+    ('address_components',),
     'types',
     'long_name',
     'country',
@@ -37,7 +52,7 @@ GOOGLE_KEYS = (
     'administrative_area_level_1',
     'street_number',
     'route',
-    ('formatted_address', )
+    ('formatted_address',)
 )
 
 YANDEX_KEYS = (
