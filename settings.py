@@ -20,6 +20,7 @@ class Geocoder(ABC):
         self.postal_code = postal_code
 
 
+
 # env variables
 
 load_dotenv()
