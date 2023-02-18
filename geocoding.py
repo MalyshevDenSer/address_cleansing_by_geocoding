@@ -7,9 +7,13 @@ from geopy.geocoders.yandex import Yandex
 from geopy.geocoders.google import GoogleV3
 
 
-def find_address_components(info: dict, keys: list) -> list:
+def find_address_components(dictionary: dict, keys: list) -> list:
+    info = dictionary
     for i in keys:
-        info = info.get(i)
+        if i is not None:
+            info = info.get(i)
+        else:
+            raise ValueError(f'There is wrong structure of keys: {keys}\nNesting in the {info} stops on {i} key')
     return info
 
 

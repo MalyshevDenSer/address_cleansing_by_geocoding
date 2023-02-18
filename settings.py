@@ -1,9 +1,9 @@
 import os
-from pprint import pprint
 
 from dotenv import load_dotenv
 from collections import OrderedDict
 from geopy import GoogleV3, Yandex
+from abc import ABC
 
 # env variables
 
@@ -29,7 +29,7 @@ DEFAULT_KEYS = OrderedDict([
 ])
 
 GOOGLE_KEYS = (
-    ('address_components', ),
+    ('address_components',),
     'types',
     'long_name',
     'country',
@@ -37,7 +37,7 @@ GOOGLE_KEYS = (
     'administrative_area_level_1',
     'street_number',
     'route',
-    ('formatted_address', )
+    ('formatted_address',)
 )
 
 YANDEX_KEYS = (
