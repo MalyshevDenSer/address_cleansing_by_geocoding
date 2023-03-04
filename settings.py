@@ -3,7 +3,6 @@ import os
 from dotenv import load_dotenv
 from collections import OrderedDict
 from geopy import GoogleV3, Yandex
-from abc import ABC
 
 # env variables
 
