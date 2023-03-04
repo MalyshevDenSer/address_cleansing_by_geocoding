@@ -1,11 +1,11 @@
 import pytest
 from settings import geocoders
 
+DEFAULT_TEST_ADDRESS = 'Скатертный переулок, 2/7, Москва, Россия'
+DEFAULT_TEST_ADDRESS_CITY = 'Москва'
+check_connection_params = [pytest.param(geocoder['engine'], id=geocoder['type']) for geocoder in geocoders]
 
 
-@pytest.mark.parametrize('geocoder', [
-    pytest.param(geocoders[0]['engine'], id=geocoders[0]['type']),
-    pytest.param(geocoders[1]['engine'], id=geocoders[1]['type']),
-])
+@pytest.mark.parametrize('geocoder', check_connection_params)
 def test_check_connection(geocoder):
-    assert 'Москва' in str(geocoder.geocode('Москва'))
+    assert DEFAULT_TEST_ADDRESS_CITY in str(geocoder.geocode(DEFAULT_TEST_ADDRESS))

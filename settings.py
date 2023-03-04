@@ -14,7 +14,7 @@ YANDEX_API = os.getenv('YANDEX_API')
 
 PATH_TO_FILE = os.getenv('PATH_TO_FILE')
 
-# keys to parse each item of address in different systems
+# keys to parse each item of address in different APIs
 
 DEFAULT_KEYS = OrderedDict([
     ('nested_dict', None),
