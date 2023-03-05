@@ -6,7 +6,7 @@ from openpyxl.worksheet.worksheet import Worksheet
 from geopy.geocoders.yandex import Yandex
 from geopy.geocoders.google import GoogleV3
 from geopy.exc import GeopyError
-from time import sleep
+from geopy import Location
 
 
 def find_address_components(dictionary: dict, keys: list) -> list:
