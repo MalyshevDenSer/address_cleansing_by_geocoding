@@ -15,14 +15,14 @@ DEFAULT = (
 
 
 @pytest.mark.parametrize(
-    'city, address, g_type, geocoder',
-    [list(DEFAULT[0]) + [geocoder['type']] + [geocoder['engine']] for geocoder in geocoders],
+    'city, address, geocoder',
+    [list(DEFAULT[0]) + [geocoder['engine']] for geocoder in geocoders],
     ids=[geocoder['type'] for geocoder in geocoders]
 )
-def test_check_connection(city, address, g_type, geocoder):
-    message = f'Wrong {g_type} API key is provided or it is blocked by service'
+def test_check_connection(city, address, geocoder):
+    message = f'Wrong API key is provided or it is blocked by service'
     try:
-        connect_to_api(geocoder, g_type, address)
+        connect_to_api(geocoder, address)
     except GeocoderInsufficientPrivileges:
         assert False, message
     except GeocoderQueryError:
