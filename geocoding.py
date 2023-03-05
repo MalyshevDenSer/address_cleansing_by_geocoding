@@ -19,20 +19,23 @@ def find_address_components(info: dict, keys: list) -> list:
     return info
 
 
-def connect_to_api(geocoder: Union[Yandex, GoogleV3], place: str) -> Union[dict, None]:
+def connect_to_api(geocoder: Union[Yandex, GoogleV3], g_type, place: str) -> Union[Location, None]:
     """Connectivity problems sometimes occur, so just in case, the script expects exceptions"""
-    try:
-        geocoded = geocoder.geocode(place)
-        return geocoded
-    except GeopyError as err:
-        print('!' * 50)
-        print(f'{type(err).__name__} is occured. Sleeping for 5 seconds.')
-        sleep(5)
-        print(f'Continuing. The address {place} is skipped')
-        return None
+    geocoded = geocoder.geocode(place)
+    return geocoded
+    # try:
+    #     geocoded = geocoder.geocode(place)
+    #     return geocoded
+    # except GeopyError as err:
+    #     print('!' * 50)
+    #     print(place)
+    #     print(f'Exception {type(err).__name__} is raised with {geocoder_type}. Sleeping for 5 seconds.')
+    #     sleep(5)
+    #     print(f'Continuing. The address {place} is skipped')
+    #     return err, None
 
 
-def parsing_raw_data(data, keys, geocoder_type) -> OrderedDict:
+def parsing_raw_data(data: Union[Location, None], keys: dict, geocoder_type: str) -> OrderedDict:
     country = region = city = street = house_number = postal_code = None
     if data is not None:
         for info in find_address_components(data.raw, keys['nested_dict']):
@@ -64,12 +67,15 @@ def parsing_raw_data(data, keys, geocoder_type) -> OrderedDict:
     return parsed_info
 
 
-def geocode(sheet: Worksheet, geocoders: list[dict]) -> None:
+def processing(sheet: Worksheet, geocoders: list[dict]) -> None:
     source_column = sheet[ascii_uppercase[0]]
     for i, cell in enumerate(source_column[1:], start=1):
         place = cell.value
         for geocoder in geocoders:
-            raw_data = connect_to_api(geocoder['engine'], place)
+            try:
+                raw_data = connect_to_api(geocoder['engine'], geocoder['type'], place)
+            except GeopyError:
+                continue
             parsed_data = parsing_raw_data(raw_data, geocoder['keys'], geocoder['type'])
             if all(parsed_data.values()):
                 worksheet.write_in_a_row(sheet, i, parsed_data)
