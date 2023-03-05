@@ -19,20 +19,9 @@ def find_address_components(info: dict, keys: list) -> list:
     return info
 
 
-def connect_to_api(geocoder: Union[Yandex, GoogleV3], g_type, place: str) -> Union[Location, None]:
-    """Connectivity problems sometimes occur, so just in case, the script expects exceptions"""
+def connect_to_api(geocoder: Union[Yandex, GoogleV3], place: str) -> Union[Location, None]:
     geocoded = geocoder.geocode(place)
     return geocoded
-    # try:
-    #     geocoded = geocoder.geocode(place)
-    #     return geocoded
-    # except GeopyError as err:
-    #     print('!' * 50)
-    #     print(place)
-    #     print(f'Exception {type(err).__name__} is raised with {geocoder_type}. Sleeping for 5 seconds.')
-    #     sleep(5)
-    #     print(f'Continuing. The address {place} is skipped')
-    #     return err, None
 
 
 def parsing_raw_data(data: Union[Location, None], keys: dict, geocoder_type: str) -> OrderedDict:
@@ -68,12 +57,13 @@ def parsing_raw_data(data: Union[Location, None], keys: dict, geocoder_type: str
 
 
 def processing(sheet: Worksheet, geocoders: list[dict]) -> None:
+    """Connectivity problems sometimes occur, so just in case, the script expects exceptions"""
     source_column = sheet[ascii_uppercase[0]]
     for i, cell in enumerate(source_column[1:], start=1):
         place = cell.value
         for geocoder in geocoders:
             try:
-                raw_data = connect_to_api(geocoder['engine'], geocoder['type'], place)
+                raw_data = connect_to_api(geocoder['engine'], place)
             except GeopyError:
                 continue
             parsed_data = parsing_raw_data(raw_data, geocoder['keys'], geocoder['type'])
