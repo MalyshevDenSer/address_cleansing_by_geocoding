@@ -8,7 +8,6 @@ from geopy.geocoders.google import GoogleV3
 from geopy.location import Location
 from geopy.exc import GeopyError
 from pprint import pprint
-from time import sleep
 
 
 def find_address_components(info: dict, keys: list) -> list:

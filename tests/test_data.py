@@ -1,3 +1,8 @@
+class Location():
+    def __init__(self, raw):
+        self.raw = raw
+
+
 MSK_ADDRESS_GOOGLE = {'address_components': [{'long_name': '2',
                                               'short_name': '2',
                                               'types': ['street_number']},
@@ -304,22 +309,41 @@ NSK_ADDRESS_YANDEX = {'Point': {'pos': '38.286979 54.004945'},
                                                                         'Трудовые Резервы, 3'}},
                       'name': 'улица Трудовые Резервы, 3'}
 
+
+MSK_ADDRESS_GOOGLE_LOCATION = Location(raw=MSK_ADDRESS_GOOGLE)
+MSK_ADDRESS_YANDEX_LOCATION = Location(raw=MSK_ADDRESS_YANDEX)
+OBNX_ADDRESS_GOOGLE_LOCATION = Location(raw=OBNX_ADDRESS_GOOGLE)
+OBNX_ADDRESS_YANDEX_LOCATION = Location(raw=OBNX_ADDRESS_YANDEX)
+NSK_ADDRESS_GOOGLE_LOCATION = Location(raw=NSK_ADDRESS_GOOGLE)
+NSK_ADDRESS_YANDEX_LOCATION = Location(raw=NSK_ADDRESS_YANDEX)
+
+
+GOOGLE_TEST = [MSK_ADDRESS_GOOGLE_LOCATION, OBNX_ADDRESS_GOOGLE_LOCATION, NSK_ADDRESS_GOOGLE_LOCATION]
+YANDEX_TEST = [MSK_ADDRESS_YANDEX_LOCATION, OBNX_ADDRESS_YANDEX_LOCATION, NSK_ADDRESS_YANDEX_LOCATION]
+
+
+DEFAULT = (
+    ['Москва', 'Скатертный переулок, 2/7, Москва, Россия'],
+    ['Обнинск', 'Аксенова 18, Обнинск, Россия'],
+    ['Новомосковск', 'улица Трудовые Резервы, 3, Новомосковск, Россия']
+)
+
 MSK_TEST = {
-    'google': MSK_ADDRESS_GOOGLE,
-    'yandex': MSK_ADDRESS_YANDEX,
+    'google': MSK_ADDRESS_GOOGLE_LOCATION,
+    'yandex': MSK_ADDRESS_YANDEX_LOCATION,
     'address': 'Скатертный переулок, 2/7, Москва, Россия'
 
 }
 
 OBNX_TEST = {
-    'google': OBNX_ADDRESS_GOOGLE,
-    'yandex': OBNX_ADDRESS_YANDEX,
+    'google': OBNX_ADDRESS_GOOGLE_LOCATION,
+    'yandex': OBNX_ADDRESS_YANDEX_LOCATION,
     'address': 'Аксенова 18, Обнинск, Россия'
 }
 
 NSK_TEST = {
-    'google': NSK_ADDRESS_GOOGLE,
-    'yandex': NSK_ADDRESS_YANDEX,
+    'google': NSK_ADDRESS_GOOGLE_LOCATION,
+    'yandex': NSK_ADDRESS_YANDEX_LOCATION,
     'address': 'улица Трудовые Резервы, 3, Новомосковск, Россия'
 }
 
