@@ -1,17 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import pytest
+from tests.test_data import DEFAULT
 from settings import geocoders
 from geocoding import connect_to_api
-from geopy.exc import GeocoderQueryError, GeocoderInsufficientPrivileges, GeopyError
-from urllib.error import HTTPError
-from settings import GOOGLE_V3_API
-
-DEFAULT = (
-    ['Москва', 'Скатертный переулок, 2/7, Москва, Россия'],
-    ['Обнинск', 'Аксенова 18, Обнинск, Россия'],
-    ['Новомосковск', 'улица Трудовые Резервы, 3, Новомосковск, Россия']
-)
+from geopy.exc import GeocoderQueryError, GeocoderInsufficientPrivileges
 
 
 @pytest.mark.parametrize(
@@ -19,7 +12,7 @@ DEFAULT = (
     [list(DEFAULT[0]) + [geocoder['engine']] for geocoder in geocoders],
     ids=[geocoder['type'] for geocoder in geocoders]
 )
-def test_check_connection(city, address, geocoder):
+def test_connect_to_api(city, address, geocoder):
     message = f'Wrong API key is provided or it is blocked by service'
     try:
         connect_to_api(geocoder, address)
