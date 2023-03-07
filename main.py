@@ -1,9 +1,9 @@
 import geocoding
 import worksheet
-from settings import geocoders, PATH_TO_FILE
+from settings import PATH_TO_FILE
 
 if __name__ == "__main__":
     wb = worksheet.open_wb(PATH_TO_FILE)
     address_sheet = wb.active
-    geocoding.processing(address_sheet, geocoders)
+    geocoding.processing(address_sheet)
     worksheet.save_wb(wb)

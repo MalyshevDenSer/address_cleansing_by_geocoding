@@ -1,5 +1,6 @@
 from string import ascii_uppercase
 import worksheet
+from settings import geocoders
 from collections import OrderedDict
 from typing import Union
 from openpyxl.worksheet.worksheet import Worksheet
@@ -55,7 +56,7 @@ def parsing_raw_data(data: Union[Location, None], keys: dict, geocoder_type: str
     return parsed_info
 
 
-def processing(sheet: Worksheet, geocoders: list[dict]) -> None:
+def processing(sheet: Worksheet) -> None:
     """Connectivity problems sometimes occur, so just in case, the script expects exceptions"""
     source_column = sheet[ascii_uppercase[0]]
     for i, cell in enumerate(source_column[1:], start=1):
