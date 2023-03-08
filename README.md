@@ -51,7 +51,7 @@ pip3 install -r requirements.txt
 python3 main.py
 ```
 
-### Как можно доработать?
+### Что можно доработать?
 
 1. Существует еще много геокодеров согласно официальной докумнетации geopy: https://geopy.readthedocs.io/en/stable/#module-geopy.geocoders
 
