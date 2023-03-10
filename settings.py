@@ -16,15 +16,15 @@ PATH_TO_FILE = os.getenv('PATH_TO_FILE')
 # keys to parse each item of address in different APIs
 
 DEFAULT_KEYS = OrderedDict([
-    ('nested_dict', None),
-    ('item', None),
-    ('value', None),
+    ('nested_dict', None),  # path to the address data in geocoder response
+    ('item', None),  # block of info
+    ('value', None),  # type of that block
     ('country', None),
     ('city', None),
     ('region', None),
     ('house_number', None),
     ('street', None),
-    ('postal_code', None)
+    ('postal_code', None)  # path to postcode in geocoder response
 ])
 
 GOOGLE_KEYS = (

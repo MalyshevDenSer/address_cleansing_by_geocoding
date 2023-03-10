@@ -11,6 +11,10 @@ from geopy import Location
 
 
 def find_address_components(dictionary: dict, keys: list) -> list:
+    """
+    Getting value of the nested dict. Either path to the
+    address data in geocoder response or postal code.
+    """
     info = dictionary
     for i in keys:
         if i is not None:
@@ -26,6 +30,10 @@ def connect_to_api(geocoder: Union[Yandex, GoogleV3], place: str) -> Union[Locat
 
 
 def parsing_raw_data(data: Union[Location, None], keys: dict, geocoder_type: str) -> OrderedDict:
+    """
+    Unpacking geocoder response to the address fields relying on type of geocoder
+    to choose specific keys
+    """
     country = region = city = street = house_number = postal_code = None
     if data is not None:
         for info in find_address_components(data.raw, keys['nested_dict']):
@@ -57,9 +65,11 @@ def parsing_raw_data(data: Union[Location, None], keys: dict, geocoder_type: str
 
 
 def processing(sheet: Worksheet) -> None:
-    """Connectivity problems sometimes occur, so just in case, the script expects exceptions"""
+    """
+    Connectivity problems sometimes occur, so just in case, the script expects exceptions
+    """
     source_column = sheet[ascii_uppercase[0]]
-    for i, cell in enumerate(source_column[1:], start=1):
+    for row_number, cell in enumerate(source_column[1:], start=1):
         place = cell.value
         for geocoder in geocoders:
             try:
@@ -68,5 +78,5 @@ def processing(sheet: Worksheet) -> None:
                 continue
             parsed_data = parsing_raw_data(raw_data, geocoder['keys'], geocoder['type'])
             if all(parsed_data.values()):
-                worksheet.write_in_a_row(sheet, i, parsed_data)
+                worksheet.write_in_a_row(sheet, row_number, parsed_data)
                 break

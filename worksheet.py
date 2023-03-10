@@ -10,9 +10,12 @@ def open_wb(path_to_file: str) -> Workbook:
     return wb_obj
 
 
-def write_in_a_row(sheet: Worksheet, i: int, parsed_info: OrderedDict) -> None:
+def write_in_a_row(sheet: Worksheet, row_number: int, parsed_info: OrderedDict) -> None:
+    """
+    Writing fields of parsed data info in cells of particular row
+    """
     for letter, key in enumerate(parsed_info, start=1):
-        sheet[ascii_uppercase[letter]][i].value = parsed_info[key]
+        sheet[ascii_uppercase[letter]][row_number].value = parsed_info[key]
 
 
 def save_wb(wb: Workbook) -> None:
