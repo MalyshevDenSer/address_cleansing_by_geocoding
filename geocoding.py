@@ -1,7 +1,5 @@
-from string import ascii_uppercase
-import worksheet
-from settings import geocoders
-from collections import OrderedDict
+from worksheet import ascii_uppercase, write_in_a_row
+from settings import geocoders, OrderedDict
 from typing import Union
 from openpyxl.worksheet.worksheet import Worksheet
 from geopy.geocoders.yandex import Yandex
@@ -78,5 +76,5 @@ def processing(sheet: Worksheet) -> None:
                 continue
             parsed_data = parsing_raw_data(raw_data, geocoder['keys'], geocoder['type'])
             if all(parsed_data.values()):
-                worksheet.write_in_a_row(sheet, row_number, parsed_data)
+                write_in_a_row(sheet, row_number, parsed_data)
                 break
