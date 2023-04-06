@@ -10,7 +10,6 @@ load_dotenv()
 
 GOOGLE_V3_API = os.getenv('GOOGLE_V3_API')
 YANDEX_API = os.getenv('YANDEX_API')
-
 PATH_TO_FILE = os.getenv('PATH_TO_FILE')
 
 # keys to parse each item of address in different APIs
